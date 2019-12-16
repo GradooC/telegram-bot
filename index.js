@@ -1,6 +1,7 @@
 process.env.NTBA_FIX_319 = 1;
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 const axios = require('axios');
+// const fs = require('fs');
 
 // Подключаем библиотеку для работы с Telegram API в переменную.
 const TelegramBot = require('node-telegram-bot-api');
@@ -19,20 +20,20 @@ const headers = {
 };
 
 // Создаём бота.
-// const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
+const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
-// bot.onText(/Котик/, async () => {
-    
-// });
+bot.onText(/Котик/, async msg => {
+    const chatId = msg.chat.id;
+    const imageLink = await getImageLink();
+    // const imageBuffer = fs.readFileSync(imageLink);
+    bot.sendPhoto(chatId, imageLink);
+});
 
-const loadImage = async () => {
+const getImageLink = async () => {
     try {
         const response = await axios.get(CATS_API_URL, { headers });
-        console.log("TCL: loadImage -> response.data", response.data)
-        return response.data;
+        return response.data[0].url;
     } catch (e) {
         console.log(e);
     }
 };
-
-loadImage();
