@@ -2,6 +2,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 // Подключаем библиотеку для работы с http запросами.
 const axios = require('axios');
+const request = require('request');
 
 // Устанавливаем токен, который выдавал нам бот.
 const TELEGRAM_TOKEN = '983998610:AAHe5eJ7xTEExJxgWq6w8_ZhtdURtrUEbUw';
@@ -19,6 +20,15 @@ require('https')
     .on('request', function(req, res) {
         res.end('');
     });
+
+// Костыль для предотвращения ухода приложения в простой.
+const ping = () =>
+    request('https://telegram--jokes-bot.herokuapp.com/', (error, response, body) => {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body); // Print body of response received
+    });
+setInterval(ping, 1 * 60 * 1000); // I have set to 20 mins interval
 
 const headers = {
     'X-API-KEY': CATS_API_TOKEN
