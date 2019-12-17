@@ -14,12 +14,19 @@ const CATS_API_TOKEN = '823dba03-2254-4d4c-aef1-9b495d91451b';
 const CATS_API_URL = 'https://api.thecatapi.com/v1/images/search';
 
 // Костыль, чтобы heroku не ругался на $PORT.
-require('https')
-    .createServer()
-    .listen(process.env.PORT || 5000)
-    .on('request', function(req, res) {
-        res.end('');
-    });
+const http = require('http');
+const port = process.env.PORT || 3000;
+const requestHandler = (request, response) => {
+    console.log(request.url);
+    response.end('Hello Node.js Server!');
+};
+const server = http.createServer(requestHandler);
+server.listen(port, err => {
+    if (err) {
+        return console.log('something bad happened', err);
+    }
+    console.log(`server is listening on ${port}`);
+});
 
 // Костыль для предотвращения ухода приложения в простой.
 const ping = () =>
