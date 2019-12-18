@@ -35,7 +35,7 @@ const ping = () =>
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body); // Print body of response received
     });
-setInterval(ping, 1 * 60 * 1000); // I have set to 20 mins interval
+setInterval(ping, 5 * 60 * 1000); // I have set to 5 mins interval
 
 const headers = {
     'X-API-KEY': CATS_API_TOKEN
@@ -54,7 +54,7 @@ const getImageLink = async () => {
     return response.data[0].url;
 };
 
-bot.onText(/Полина хочет котика/, async msg => {
+bot.onText(/Полина хочет котика|Хочу котика/, async msg => {
     try {
         const chatId = msg.chat.id;
         const imageLink = await getImageLink();
